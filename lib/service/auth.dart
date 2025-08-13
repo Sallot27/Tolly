@@ -1,26 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
-class AuthService extends ChangeNotifier {
-final FirebaseAuth _auth = FirebaseAuth.instance;
-User? user;
-bool isLoading = true;
+class AuthService with ChangeNotifier {
+  String? _userId;
+  String? get user => _userId;
 
-AuthService() {
-_auth.authStateChanges().listen(_onAuthStateChanged);
-}
-
-Future<void> _onAuthStateChanged(User? firebaseUser) async {
-user = firebaseUser;
-isLoading = false;
-notifyListeners();
-}
-
-Future<void> signInAnonymously() async {
-await _auth.signInAnonymously();
-}
-
-Future<void> signOut() async {
-await _auth.signOut();
-}
+  Future<void> signInAnonymously() async {
+    _userId = const Uuid().v4();
+    notifyListeners();
+  }
 }

@@ -1,18 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 import '../model/booking.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookingService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-
-  Future<void> createBooking(BookingModel booking) async {
-    await _db.collection('bookings').doc(booking.id).set(booking.toMap());
-  }
+  final List<BookingModel> _bookings = [];
 
   Stream<List<BookingModel>> getBookingsForUser(String userId) {
-    return _db
-        .collection('bookings')
-        .where('lenderId', isEqualTo: userId)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => BookingModel.fromMap(doc.data())).toList());
+    return Stream.value(_bookings.where((b) => b.borrowerId == userId).toList());
+  }
+
+  Future<void> createBooking(BookingModel booking) async {
+    // In a real app, you'd add the booking to Firestore
+    // For this mock, we'll just add it to the list
+    _bookings.add(booking);
   }
 }

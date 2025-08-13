@@ -1,40 +1,16 @@
-<p align="center">
-  <img src="icon.jpg" alt="Sallot27 Logo" width="150"/>
-</p>
+# tolly
 
-# Project Name
+A new Flutter project.
 
-> ⚡ A brief one-liner about what this project does
+## Getting Started
 
-## 📚 Table of Contents
-- [🎥 Demo](#demo)
-- [✨ Features](#features)
-- [⚙ Installation](#installation)
-- [🚀 Usage](#usage)
-- [🧰 Technologies](#technologies)
-- [🖼 Screenshots](#screenshots)
-- [🪪 License](#license)
-- [📬 Contact](#contact)
+This project is a starting point for a Flutter application.
 
----
+A few resources to get you started if this is your first Flutter project:
 
-## 🎥 Demo
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-Coming soon! (Add link to live demo, video, or GIF)
-
----
-
-## ✨ Features
-- [x] Clean and responsive UI
-- [x] Firebase integration
-- [ ] Dark mode support (coming soon)
-
----
-
-## ⚙ Installation
-
-```bash
-git clone https://github.com/sallot27/project-name.git
-cd project-name
-flutter pub get
-flutter run
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

@@ -1,13 +1,8 @@
-
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class StorageService {
-final FirebaseStorage _storage = FirebaseStorage.instance;
-
-Future<String> uploadImage(File file, String path) async {
-final ref = _storage.ref().child(path);
-await ref.putFile(file);
-return await ref.getDownloadURL();
-}
+  Future<String> uploadImage(File file, String path) async {
+    await Future.delayed(const Duration(seconds: 1)); // Simulate upload time
+    return 'https://placehold.co/400x300/607D8B/FFFFFF?text=Uploaded';
+  }
 }
