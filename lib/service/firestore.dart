@@ -1,60 +1,46 @@
-import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/item.dart';
-import '../model/booking.dart';
 
 class FirestoreService {
-  final List<ItemModel> _items = [
-    ItemModel(
-      id: '1',
-      ownerId: 'owner123',
-      title: 'Power Drill',
-      description: 'A powerful cordless drill for all your home projects.',
-      imageUrl: 'https://placehold.co/400x300/4CAF50/FFFFFF?text=Drill',
-      category: 'Construction',
-      deposit: 50.0,
-      pricePerDay: 15.0,
-    ),
-    ItemModel(
-      id: '2',
-      ownerId: 'owner123',
-      title: 'Lawn Mower',
-      description: 'An electric lawn mower for a clean cut every time.',
-      imageUrl: 'https://placehold.co/400x300/2196F3/FFFFFF?text=Mower',
-      category: 'Gardening',
-      deposit: 75.0,
-      pricePerDay: 20.0,
-    ),
-    ItemModel(
-      id: '3',
-      ownerId: 'borrower456',
-      title: 'Ladder',
-      description: 'A sturdy 10-foot ladder for those hard-to-reach places.',
-      imageUrl: 'https://placehold.co/400x300/FFC107/000000?text=Ladder',
-      category: 'General',
-      deposit: 30.0,
-      pricePerDay: 10.0,
-    ),
-  ];
+  final CollectionReference _itemsCollection =
+      FirebaseFirestore.instance.collection('items');
 
+  // Get a stream of all items from Firestore.
   Stream<List<ItemModel>> getItems() {
-    return Stream.value(_items);
+    return _itemsCollection.snapshots().map(
+      (snapshot) => snapshot.docs
+          .map((doc) => ItemModel.fromFirestore(doc))
+          .toList(),
+    );
   }
 
+  // Get a stream of items owned by a specific user.
   Stream<List<ItemModel>> getItemsForUser(String userId) {
-    return Stream.value(_items.where((item) => item.ownerId == userId).toList());
+    return _itemsCollection
+        .where('ownerId', isEqualTo: userId)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => ItemModel.fromFirestore(doc))
+              .toList(),
+        );
   }
-  
-  ItemModel? getItemById(String itemId) {
+
+  // Get a single item by its ID.
+  Future<ItemModel?> getItemById(String itemId) async {
     try {
-      return _items.firstWhere((item) => item.id == itemId);
+      DocumentSnapshot doc = await _itemsCollection.doc(itemId).get();
+      if (doc.exists) {
+        return ItemModel.fromFirestore(doc);
+      }
+      return null;
     } catch (e) {
-      debugPrint("Item not found: $e");
       return null;
     }
   }
 
+  // Add a new item to Firestore.
   Future<void> addItem(ItemModel item) async {
-    _items.add(item);
+    await _itemsCollection.add(item.toFirestore());
   }
 }

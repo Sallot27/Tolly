@@ -4,34 +4,32 @@ class MessageModel {
   final String id;
   final String senderId;
   final String text;
-  final Timestamp timestamp;
-  final bool isRead;
+  final DateTime timestamp;
 
   MessageModel({
     required this.id,
     required this.senderId,
     required this.text,
     required this.timestamp,
-    this.isRead = false,
   });
 
-  factory MessageModel.fromMap(Map<String, dynamic> data) {
+  // Factory constructor to create a MessageModel from a Firestore document.
+  factory MessageModel.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data() as Map<String, dynamic>;
     return MessageModel(
-      id: data['id'],
-      senderId: data['senderId'],
-      text: data['text'],
-      timestamp: data['timestamp'],
-      isRead: data['isRead'] ?? false,
+      id: doc.id,
+      senderId: data['senderId'] ?? '',
+      text: data['text'] ?? '',
+      timestamp: (data['timestamp'] as Timestamp).toDate(),
     );
   }
 
-  Map<String, dynamic> toMap() {
+  // Method to convert a MessageModel to a format suitable for Firestore.
+  Map<String, dynamic> toFirestore() {
     return {
-      'id': id,
       'senderId': senderId,
       'text': text,
-      'timestamp': timestamp,
-      'isRead': isRead,
+      'timestamp': Timestamp.fromDate(timestamp),
     };
   }
 }
